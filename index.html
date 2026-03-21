@@ -187,7 +187,7 @@
 
     <script>
         // ★ここにGoogle Apps Scriptで発行した「ウェブアプリのURL」を貼り付けてください
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxyMTtNHmsD_SrQ418u-4EMVFxcUdiEKaqRBf3hVJMFwCoxuUR3vEcGlsKTQBFwOKEw/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxKHywt1oojkxszQeFiai5RRFIILfefcwwUkRKJ-I3fGPauINY0DT431QQiSQVyvNhB/exec";
 
         document.addEventListener('DOMContentLoaded', function() {
             const locationSelect = document.getElementById('location');
@@ -201,27 +201,46 @@
             const mailPreview = document.getElementById('mail-preview');
             const errorToast = document.getElementById('error-toast');
 
+            // Flatpickrの初期化
             const fp = flatpickr(dateInput, {
                 locale: "ja",
                 minDate: "today",
                 dateFormat: "Y年m月d日(D)",
-                disable: [() => true],
+                disable: [() => true], // 最初はすべて無効
                 disableMobile: "true"
             });
 
+            // 会場選択時の処理
             locationSelect.addEventListener('change', function() {
                 const loc = this.value;
+                
+                // 入力欄を有効化
                 dateInput.disabled = false;
                 dateInput.value = '';
                 dateInput.placeholder = "日付をタップして選択";
-
+                
+                // カレンダーの選択制限を更新
                 if (loc.includes('おぶせ')) {
                     dateHelp.textContent = "【受付中】火曜日・金曜日のみ可能です。";
-                    fp.set('disable', [(date) => (date.getDay() !== 2 && date.getDay() !== 5)]);
+                    // 火曜(2)と金曜(5)以外を無効にする
+                    fp.set('disable', [
+                        function(date) {
+                            return (date.getDay() !== 2 && date.getDay() !== 5);
+                        }
+                    ]);
                 } else if (loc.includes('すざか')) {
                     dateHelp.textContent = "【受付中】月曜日・木曜日のみ可能です。";
-                    fp.set('disable', [(date) => (date.getDay() !== 1 && date.getDay() !== 4)]);
+                    // 月曜(1)と木曜(4)以外を無効にする
+                    fp.set('disable', [
+                        function(date) {
+                            return (date.getDay() !== 1 && date.getDay() !== 4);
+                        }
+                    ]);
                 }
+                
+                // 内部状態をリセットして再描画
+                fp.clear();
+                fp.redraw();
             });
 
             function showError(msg) {
@@ -233,7 +252,7 @@
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                if (GAS_URL === "ここにURLを貼り付け") {
+                if (GAS_URL === "" || GAS_URL.includes("ここにURL")) {
                     showError("GASのURLが設定されていません。設定ガイドを確認してください。");
                     return;
                 }
@@ -246,22 +265,23 @@
                 const data = Object.fromEntries(formData.entries());
 
                 try {
-                    // GASへデータを送信
-                    const response = await fetch(GAS_URL, {
-                        mode: 'no-cors'
+                    // CORSエラー回避のため mode: 'no-cors' を使用
+                    await fetch(GAS_URL, {
                         method: 'POST',
+                        mode: 'no-cors', 
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify(data)
                     });
 
-                    if (!response.ok) throw new Error('Network response was not ok');
-
-                    // 成功表示
+                    // 送信完了画面を表示
                     mailPreview.textContent = `【お申し込み内容の控え】\n会場：${data.location}\n希望日：${data.date}\n生徒名：${data.student_name} 様\n保護者：${data.parent_name} 様\n\n確認メールを送信しました。`;
                     modal.classList.remove('hidden');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } catch (err) {
                     console.error(err);
-                    showError("送信中にエラーが発生しました。設定が正しいか確認してください。");
+                    showError("送信中にエラーが発生しました。インターネット接続やGASの設定を確認してください。");
                 } finally {
                     submitBtn.disabled = false;
                     btnText.textContent = "内容を確認して送信する";

@@ -173,7 +173,6 @@
     </footer>
 
     <script>
-        // ★ここにGoogle Apps Scriptで発行した「ウェブアプリのURL」を貼り付けてください
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzjWWuwi7fcekeCj4B3EukdStq246Urb0v3NfBIv7jA4voPVcVnNPDnKJE_fL7cWmAh/exec";
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -181,7 +180,6 @@
             const dateInput = document.getElementById('date');
             const dateHelp = document.getElementById('date-help');
             const gradeSelect = document.getElementById('grade');
-            const studentNameInput = document.getElementById('student_name');
             const form = document.getElementById('application-form');
             const submitBtn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
@@ -190,12 +188,11 @@
             const mailPreview = document.getElementById('mail-preview');
             const errorToast = document.getElementById('error-toast');
 
-            // Flatpickrの初期化
             const fp = flatpickr(dateInput, {
                 locale: "ja",
                 minDate: "today",
                 dateFormat: "Y年m月d日(D)",
-                disable: [() => true], // 初期状態
+                disable: [() => true],
                 disableMobile: "true",
                 clickOpens: true,
                 allowInput: false
@@ -207,7 +204,7 @@
                 
                 dateInput.removeAttribute('disabled');
                 dateInput.value = '';
-                dateInput.placeholder = "日付をタップして選択";
+                dateInput.placeholder = "日付を選択してください";
                 
                 let disableFunc;
                 if (loc.includes('おぶせ')) {
@@ -223,19 +220,10 @@
                 }
                 
                 fp.clear();
-                
-                // ★追加：会場を選択したら自動的にカレンダーを開く
-                setTimeout(() => {
-                    fp.open();
-                }, 100);
+                // ★修正：自動で開く処理を削除しました
             });
 
-            // ★追加：学年を選択したら自動的に生徒名へフォーカスを移す
-            gradeSelect.addEventListener('change', function() {
-                if (this.value) {
-                    studentNameInput.focus();
-                }
-            });
+            // ★修正：学年選択時の自動フォーカス処理を削除しました
 
             function showError(msg) {
                 errorToast.textContent = msg;
@@ -246,11 +234,6 @@
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                if (GAS_URL === "" || GAS_URL.includes("ここにURL")) {
-                    showError("GASのURLが設定されていません。設定ガイドを確認してください。");
-                    return;
-                }
-
                 submitBtn.disabled = true;
                 btnText.textContent = "データを送信中...";
                 btnLoader.classList.remove('hidden');
@@ -272,8 +255,7 @@
                     modal.classList.remove('hidden');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } catch (err) {
-                    console.error(err);
-                    showError("送信中にエラーが発生しました。インターネット接続やGASの設定を確認してください。");
+                    showError("送信中にエラーが発生しました。");
                 } finally {
                     submitBtn.disabled = false;
                     btnText.textContent = "内容を確認して送信する";

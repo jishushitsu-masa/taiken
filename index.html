@@ -174,4 +174,122 @@
 
     <script>
         // ★ここにGoogle Apps Scriptで発行した「ウェブアプリのURL」を貼り付けてください
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzjWWuwi7fcekeC
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzjWWuwi7fcekeCj4B3EukdStq246Urb0v3NfBIv7jA4voPVcVnNPDnKJE_fL7cWmAh/exec";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const locationSelect = document.getElementById('location');
+            const dateInput = document.getElementById('date');
+            const dateHelp = document.getElementById('date-help');
+            const gradeSelect = document.getElementById('grade');
+            const studentNameInput = document.getElementById('student_name');
+            const form = document.getElementById('application-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+            const modal = document.getElementById('success-modal');
+            const mailPreview = document.getElementById('mail-preview');
+            const errorToast = document.getElementById('error-toast');
+
+            // Flatpickrの初期化
+            const fp = flatpickr(dateInput, {
+                locale: "ja",
+                minDate: "today",
+                dateFormat: "Y年m月d日(D)",
+                disable: [() => true], // 初期状態
+                disableMobile: "true",
+                clickOpens: true,
+                allowInput: false
+            });
+
+            // 会場選択時の処理
+            locationSelect.addEventListener('change', function() {
+                const loc = this.value;
+                
+                dateInput.removeAttribute('disabled');
+                dateInput.value = '';
+                dateInput.placeholder = "日付をタップして選択";
+                
+                let disableFunc;
+                if (loc.includes('おぶせ')) {
+                    dateHelp.textContent = "【受付中】火曜日・金曜日のみ可能です。";
+                    disableFunc = (date) => (date.getDay() !== 2 && date.getDay() !== 5);
+                } else if (loc.includes('すざか')) {
+                    dateHelp.textContent = "【受付中】月曜日・木曜日のみ可能です。";
+                    disableFunc = (date) => (date.getDay() !== 1 && date.getDay() !== 4);
+                }
+
+                if (disableFunc) {
+                    fp.set('disable', [disableFunc]);
+                }
+                
+                fp.clear();
+                
+                // ★追加：会場を選択したら自動的にカレンダーを開く
+                setTimeout(() => {
+                    fp.open();
+                }, 100);
+            });
+
+            // ★追加：学年を選択したら自動的に生徒名へフォーカスを移す
+            gradeSelect.addEventListener('change', function() {
+                if (this.value) {
+                    studentNameInput.focus();
+                }
+            });
+
+            function showError(msg) {
+                errorToast.textContent = msg;
+                errorToast.classList.remove('hidden');
+                setTimeout(() => errorToast.classList.add('hidden'), 5000);
+            }
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (GAS_URL === "" || GAS_URL.includes("ここにURL")) {
+                    showError("GASのURLが設定されていません。設定ガイドを確認してください。");
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                btnText.textContent = "データを送信中...";
+                btnLoader.classList.remove('hidden');
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    await fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', 
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    mailPreview.textContent = `【お申し込み内容の控え】\n会場：${data.location}\n希望日：${data.date}\n生徒名：${data.student_name} 様\n保護者：${data.parent_name} 様\n\n確認メールを送信しました。`;
+                    modal.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } catch (err) {
+                    console.error(err);
+                    showError("送信中にエラーが発生しました。インターネット接続やGASの設定を確認してください。");
+                } finally {
+                    submitBtn.disabled = false;
+                    btnText.textContent = "内容を確認して送信する";
+                    btnLoader.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('close-modal').addEventListener('click', () => {
+                modal.classList.add('hidden');
+                form.reset();
+                fp.clear();
+                dateInput.setAttribute('disabled', 'true');
+                dateInput.placeholder = "先に会場を選択してください";
+                dateHelp.textContent = "";
+            });
+        });
+    </script>
+</body>
+</html>

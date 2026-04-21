@@ -3,32 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>無料体験 申込フォーム</title>
+    <title>【元塾講師マサちゃんの自習室】無料体験 申込フォーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f3f4f6; }
-        .form-container { max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 1rem; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f0f4f8; }
+        .bg-gradient-custom { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .glass-morphism { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .input-focus { transition: all 0.3s ease; }
+        .input-focus:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); outline: none; }
+        .hero-image { background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; }
     </style>
 </head>
-<body>
-    <div class="form-container">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">無料体験 申込フォーム</h1>
-        <form id="experience-form" class="space-y-4">
-            <div><label class="block text-sm font-bold text-gray-700">会場</label>
-                <select name="venue" required class="w-full border p-3 rounded-lg"><option value="">選択してください</option><option value="おぶせ岩松院会場">おぶせ岩松院会場</option><option value="すざかシルキー会場">すざかシルキー会場</option></select>
+<body class="min-h-screen pb-12">
+
+    <div class="h-64 hero-image relative flex items-center justify-center">
+        <div class="absolute inset-0 bg-blue-900/40"></div>
+        <div class="relative text-center text-white px-4">
+            <div class="bg-white/20 backdrop-blur-md p-6 rounded-2xl border border-white/30">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">無料体験 申込フォーム</h1>
+                <p class="text-blue-50 text-sm md:text-base">元塾講師マサちゃんの自習室</p>
             </div>
-            <div><label class="block text-sm font-bold text-gray-700">体験希望日</label><input type="date" name="date" required class="w-full border p-3 rounded-lg"></div>
-            <div><label class="block text-sm font-bold text-gray-700">学年</label>
-                <select name="grade" required class="w-full border p-3 rounded-lg"><option value="">選択してください</option><option value="中1">中1</option><option value="中2">中2</option><option value="中3">中3</option></select>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto -mt-10 px-4">
+        <div class="glass-morphism rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-8 md:p-12">
+                
+                <form id="experience-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                                <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i> 会場を選択 <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <select name="venue" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus appearance-none cursor-pointer">
+                                <option value="">選択してください</option>
+                                <option value="おぶせ岩松院会場">おぶせ岩松院会場</option>
+                                <option value="すざかシルキー会場">すざかシルキー会場</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                                <i class="fas fa-calendar-alt text-blue-500 mr-2"></i> 体験希望日 <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input type="date" name="date" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                                <i class="fas fa-graduation-cap text-blue-500 mr-2"></i> 学年 <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <select name="grade" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus appearance-none cursor-pointer">
+                                <option value="">選択してください</option>
+                                <option value="中1">中1</option><option value="中2">中2</option><option value="中3">中3</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                                <i class="fas fa-user-graduate text-blue-500 mr-2"></i> 生徒氏名 <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input type="text" name="studentName" placeholder="山田 太郎" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                                <i class="fas fa-user-friends text-blue-500 mr-2"></i> 保護者氏名 <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input type="text" name="parentName" placeholder="山田 花子" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                                <i class="fas fa-phone text-blue-500 mr-2"></i> 電話番号 <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input type="tel" name="phone" placeholder="09012345678" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                            <i class="fas fa-envelope text-blue-500 mr-2"></i> メールアドレス <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <input type="email" name="email" placeholder="example@mail.com" required class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+                            <i class="fas fa-comment-alt text-blue-500 mr-2"></i> 備考・質問など
+                        </label>
+                        <textarea name="memo" placeholder="質問事項や伝えておきたいことなどがあればご記入ください" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl input-focus" rows="4"></textarea>
+                    </div>
+
+                    <button type="button" onclick="submitForm()" id="submit-btn" class="w-full bg-gradient-custom text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 active:scale-95 transition-all text-lg flex items-center justify-center">
+                        <span>申し込む</span>
+                        <i class="fas fa-paper-plane ml-3"></i>
+                    </button>
+                </form>
+
+                <div id="success-msg" class="hidden text-center py-10 space-y-4">
+                    <div class="w-24 h-24 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800">送信が完了しました</h2>
+                    <p class="text-gray-500 leading-relaxed">
+                        無料体験のお申し込みありがとうございます。<br>
+                        内容を確認し、担当者より折り返しご連絡いたします。
+                    </p>
+                </div>
             </div>
-            <div><label class="block text-sm font-bold text-gray-700">生徒氏名</label><input type="text" name="studentName" required class="w-full border p-3 rounded-lg"></div>
-            <div><label class="block text-sm font-bold text-gray-700">保護者氏名</label><input type="text" name="parentName" required class="w-full border p-3 rounded-lg"></div>
-            <div><label class="block text-sm font-bold text-gray-700">電話番号</label><input type="tel" name="phone" required class="w-full border p-3 rounded-lg"></div>
-            <div><label class="block text-sm font-bold text-gray-700">メールアドレス</label><input type="email" name="email" required class="w-full border p-3 rounded-lg"></div>
-            <div><label class="block text-sm font-bold text-gray-700">備考・質問など</label><textarea name="memo" class="w-full border p-3 rounded-lg" rows="3"></textarea></div>
-            <button type="button" onclick="submitForm()" id="submit-btn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-lg shadow hover:bg-blue-700 transition-all">申し込む</button>
-        </form>
-        <div id="success-msg" class="hidden text-center py-10"><div class="text-5xl mb-4">✅</div><h2 class="text-xl font-bold text-gray-800 mb-2">送信完了しました</h2><p class="text-gray-500 text-sm">確認後、担当者よりご連絡いたします。</p></div>
+        </div>
+        <p class="text-center mt-8 text-gray-400 text-xs italic">
+            &copy; 2026 Former Cram School Teacher Masa-chan's Study Room
+        </p>
     </div>
 
     <script>
@@ -40,9 +134,11 @@
             if(!form.checkValidity()) return form.reportValidity();
             
             const btn = document.getElementById('submit-btn');
+            const originalBtnHtml = btn.innerHTML;
+            
             btn.disabled = true;
-            btn.innerHTML = "送信中...";
-            btn.classList.add('opacity-50');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> 送信中...';
+            btn.classList.add('opacity-80');
 
             const data = {
                 venue: form.venue.value,
@@ -56,19 +152,20 @@
             };
 
             try {
-                const res = await fetch(GAS_URL, {
+                const response = await fetch(GAS_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action: "submitExperience", data: data })
                 });
-                if(res.ok) {
+                if(response.ok) {
                     form.classList.add('hidden');
                     document.getElementById('success-msg').classList.remove('hidden');
-                }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else { throw new Error(); }
             } catch (e) {
-                alert("送信に失敗しました。時間をおいて再度お試しください。");
+                alert("通信に失敗しました。お手数ですが、しばらく時間を置いて再度送信していただくか、直接LINEにてご連絡ください。");
                 btn.disabled = false;
-                btn.innerHTML = "申し込む";
-                btn.classList.remove('opacity-50');
+                btn.innerHTML = originalBtnHtml;
+                btn.classList.remove('opacity-80');
             }
         }
     </script>

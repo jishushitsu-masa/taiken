@@ -13,7 +13,6 @@
         body { font-family: 'Noto Sans JP', sans-serif; background-color: #f8fafc; }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563eb; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* 改行を反映させるためのスタイル */
         .whitespace-pre-wrap { white-space: pre-wrap; }
     </style>
 </head>
@@ -88,7 +87,7 @@
     </div>
 
     <script>
-        // ★ここにGASのURLを貼り付けてください
+        // ★最新のデプロイURLをここに貼り付けてください
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzjWWuwi7fcekeCj4B3EukdStq246Urb0v3NfBIv7jA4voPVcVnNPDnKJE_fL7cWmAh/exec";
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -110,15 +109,18 @@
                 
                 const fd = new FormData(form);
                 const payload = Object.fromEntries(fd.entries());
-
-                // 会場名から時間帯を抽出する簡易的な処理
                 const timeMatch = payload.location.match(/\d{2}:\d{2}～\d{2}:\d{2}/);
                 const timeRange = timeMatch ? timeMatch[0] : "";
 
                 try {
-                    await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+                    // ★ChatGPTの指摘通り、Content-Typeをtext/plainに指定してGASへ送る（これが一番確実）
+                    await fetch(GAS_URL, { 
+                        method: 'POST', 
+                        mode: 'no-cors', // CORSエラー回避
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify(payload) 
+                    });
                     
-                    // モーダルに表示するテキストを作成
                     document.getElementById('mail-preview').textContent = 
                         `【受付内容】\n` +
                         `会場：${payload.location.split(' (')[0]}\n` +
@@ -126,7 +128,7 @@
                         `時間：${timeRange}\n` +
                         `生徒：${payload.student_name} 様\n` +
                         `電話：${payload.phone}\n\n` +
-                        `ご確認メールをお送りしましたのでご確認ください。`;
+                        `ご確認メールをお送りしました。`;
                         
                     document.getElementById('success-modal').classList.remove('hidden');
                 } catch (err) { 

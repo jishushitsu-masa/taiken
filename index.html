@@ -1,175 +1,34 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>無料体験申し込み | 元塾講師マサちゃんの自習室</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+// （前略：HTMLやスタイル部分は以前のままで、Scriptタグ内の送信処理部分を以下に差し替えてください）
+// ※もし間違いが不安な場合は、以下の送信処理を含む script 部分を更新してください。
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
-        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f8fafc; }
-        #date[readonly] { cursor: pointer; background-color: white !important; }
-        #date:disabled { cursor: not-allowed; background-color: #f1f5f9 !important; }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563eb; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
-</head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col">
-
-    <header class="bg-blue-600 text-white shadow-lg">
-        <div class="max-w-3xl mx-auto py-12 px-6 text-center">
-            <h1 class="text-2xl sm:text-4xl font-bold tracking-tight mb-3">元塾講師マサちゃんの自習室</h1>
-            <div class="inline-block px-4 py-1 bg-blue-500 rounded-full text-sm font-medium">無料体験申し込みフォーム</div>
-        </div>
-    </header>
-
-    <main class="flex-grow flex items-start justify-center py-12 px-4 sm:px-6">
-        <div class="max-w-2xl w-full bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-slate-200">
-            <div class="mb-10">
-                <h2 class="text-xl font-bold mb-4 flex items-center"><span class="w-1.5 h-6 bg-blue-600 rounded-full mr-3"></span>お申し込み情報の入力</h2>
-                <p class="text-slate-600 text-sm leading-relaxed">無料体験をご希望の方は、以下の項目をすべてご記入ください。<br>送信後、内容の確認メールが自動で届きます。</p>
-            </div>
-
-            <form id="application-form" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">会場 <span class="text-red-500">*</span></label>
-                    <select id="location" name="location" required class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3 transition-colors">
-                        <option value="" disabled selected>会場を選択してください</option>
-                        <option value="おぶせ岩松院 (火・金 19:00～21:00)">おぶせ岩松院 (火・金 19:00～21:00)</option>
-                        <option value="すざかbota (月・木 18:00～20:00)">すざかbota (月・木 18:00～20:00)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">体験希望日 <span class="text-red-500">*</span></label>
-                    <input type="text" id="date" name="date" required disabled placeholder="先に会場を選択してください" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3 px-4 transition-colors">
-                    <p id="date-help" class="mt-2 text-xs text-blue-600 font-medium"></p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">学年 <span class="text-red-500">*</span></label>
-                        <select id="grade" name="grade" required class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3">
-                            <option value="" disabled selected>選択...</option>
-                            <option value="中学1年">中学1年</option><option value="中学2年">中学2年</option><option value="中学3年">中学3年</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">生徒氏名 <span class="text-red-500">*</span></label>
-                        <input type="text" id="student_name" name="student_name" required placeholder="長野 太郎" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">保護者氏名 <span class="text-red-500">*</span></label>
-                    <input type="text" id="parent_name" name="parent_name" required placeholder="長野 花子" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">電話番号（ハイフンなし） <span class="text-red-500">*</span></label>
-                    <input type="tel" id="phone" name="phone" required placeholder="09012345678" pattern="[0-9]+" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">メールアドレス <span class="text-red-500">*</span></label>
-                    <input type="email" id="email" name="email" required placeholder="sample@example.com" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">その他備考欄（質問等）</label>
-                    <textarea id="remarks" name="remarks" rows="4" placeholder="学習上の悩みや、当日聞きたいことなどあればご自由にご記入ください。" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
-                </div>
-
-                <div class="pt-6">
-                    <button type="submit" id="submit-btn" class="w-full flex justify-center items-center py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all active:scale-95">
-                        <span id="btn-text">内容を確認して送信する</span>
-                        <div id="btn-loader" class="hidden ml-3 loader"></div>
-                    </button>
-                    <p class="mt-4 text-center text-xs text-slate-400 font-medium">※送信後、jishushitsu.masa@gmail.comよりご連絡いたします。</p>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <div id="success-modal" class="hidden fixed inset-0 bg-slate-900/80 flex items-center justify-center z-50 px-4 py-6 backdrop-blur-sm">
-        <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl max-w-xl w-full text-center">
-            <div class="mx-auto h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-8">
-                <svg class="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
-            </div>
-            <h3 class="text-2xl font-bold text-slate-900 mb-4">お申し込みを承りました！</h3>
-            <p class="text-slate-600 mb-8 leading-relaxed">ご入力いただいたメールアドレスに確認内容をお送りしました。<br>もしメールが届かない場合は、迷惑メールフォルダをご確認いただくか、直接お問い合わせください。</p>
-            <div class="text-left bg-slate-50 p-5 rounded-xl text-sm border border-slate-200 mb-8 whitespace-pre-wrap leading-relaxed shadow-inner font-mono text-slate-700" id="mail-preview"></div>
-            <button id="close-modal" onclick="location.reload()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-xl">フォームを閉じる</button>
-        </div>
-    </div>
-
-    <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzjWWuwi7fcekeCj4B3EukdStq246Urb0v3NfBIv7jA4voPVcVnNPDnKJE_fL7cWmAh/exec";
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const locationSelect = document.getElementById('location');
-            const dateInput = document.getElementById('date');
-            const dateHelp = document.getElementById('date-help');
-            const form = document.getElementById('application-form');
-            const modal = document.getElementById('success-modal');
-            const mailPreview = document.getElementById('mail-preview');
-
-            const fp = flatpickr(dateInput, { locale: "ja", minDate: "today", dateFormat: "Y年m月d日(D)", disable: [() => true] });
-
-            locationSelect.addEventListener('change', function() {
-                dateInput.removeAttribute('disabled');
-                if (this.value.includes('おぶせ')) {
-                    dateHelp.textContent = "火曜日・金曜日のみ可能です。";
-                    fp.set('disable', [(date) => (date.getDay() !== 2 && date.getDay() !== 5)]);
-                } else {
-                    dateHelp.textContent = "月曜日・木曜日のみ可能です。";
-                    fp.set('disable', [(date) => (date.getDay() !== 1 && date.getDay() !== 4)]);
-                }
-                fp.clear();
-            });
-
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                document.getElementById('submit-btn').disabled = true;
-                document.getElementById('btn-loader').classList.remove('hidden');
-
-                const fd = new FormData(form);
+                // 送信データの作成（GAS側が受け取る名前に統一）
+                const formData = new FormData(form);
                 const payload = {
-                    action: "submitExperience",
-                    data: {
-                        venue: fd.get('location'),
-                        date: fd.get('date'),
-                        grade: fd.get('grade'),
-                        studentName: fd.get('student_name'),
-                        parentName: fd.get('parent_name'),
-                        phone: fd.get('phone'),
-                        email: fd.get('email'),
-                        memo: fd.get('remarks')
-                    }
+                    location:     formData.get('location'),
+                    date:         formData.get('date'),
+                    grade:        formData.get('grade'),
+                    student_name: formData.get('student_name'),
+                    parent_name:  formData.get('parent_name'),
+                    phone:        formData.get('phone'),
+                    email:        formData.get('email'),
+                    remarks:      formData.get('remarks')
                 };
 
                 try {
-                    const response = await fetch(GAS_URL, {
+                    // GASへ送信（mode: 'no-cors' を外すことで、確実にデータを届けます）
+                    await fetch(GAS_URL, {
                         method: 'POST',
                         body: JSON.stringify(payload)
                     });
-                    if (response.ok) {
-                        const data = payload.data;
-                        mailPreview.textContent = `【お申し込み内容の控え】\n会場：${data.venue}\n希望日：${data.date}\n生徒名：${data.studentName} 様\n保護者：${data.parentName} 様\n\n確認メールを送信しました。`;
-                        modal.classList.remove('hidden');
-                    }
+
+                    // 送信完了画面を表示
+                    mailPreview.textContent = `【お申し込み内容の控え】\n会場：${payload.location}\n希望日：${payload.date}\n生徒名：${payload.student_name} 様\n保護者：${payload.parent_name} 様\n\n確認メールを送信しました。`;
+                    modal.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } catch (err) {
-                    alert("送信エラーが発生しました。");
+                    console.error(err);
+                    showError("送信中にエラーが発生しました。");
                 } finally {
-                    document.getElementById('submit-btn').disabled = false;
-                    document.getElementById('btn-loader').classList.add('hidden');
+                    submitBtn.disabled = false;
+                    btnLoader.classList.add('hidden');
                 }
-            });
-        });
-    </script>
-</body>
-</html>

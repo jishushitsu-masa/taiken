@@ -261,7 +261,7 @@
                     });
 
                     if (response.ok) {
-                        mailPreview.textContent = `【お申し込み内容の控え】\n会場：${data.venue}\n希望日：${data.date}\n生徒名：${data.studentName} 様\n保護者：${data.parentName} 様\n\n予約台帳へ連動しました。`;
+                        mailPreview.textContent = `【お申し込み内容の控え】\n会場：${data.venue}\n希望日：${data.date}\n生徒名：${data.studentName} 様\n保護者：${data.parentName} 様\n\n体験予約を承りました。`;
                         modal.classList.remove('hidden');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
